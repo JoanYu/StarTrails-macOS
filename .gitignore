@@ -1,0 +1,27 @@
+# Xcode
+#
+# commit this file to version control to prevent Xcode files from being
+# accidentally committed
+
+.idea/
+.DS_Store
+xcuserdata/
+*.xcworkspace
+xcuserdata/
+DerivedData/
+.swiftpm/
+
+# Swift build directory
+.build/
+
+# Application Bundle Output
+*.app
+
+# Models
+# DO NOT add large CoreML payloads if treating as open source templates
+# *.mlpackage
+
+# Test images
+*.jpg
+*.png
+*.jpeg
