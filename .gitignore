@@ -23,5 +23,5 @@ DerivedData/
 
 # Test images
 *.jpg
-*.png
+# *.png
 *.jpeg
