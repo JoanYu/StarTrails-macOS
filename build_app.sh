@@ -32,6 +32,27 @@ if [ -d "$BIN_PATH/StarTrailsApp_StarTrailsApp.bundle" ]; then
     cp -r "$BIN_PATH/StarTrailsApp_StarTrailsApp.bundle" "$APP_NAME.app/Contents/Resources/"
 fi
 
+# Generate AppIcon.icns
+echo "🎨 Generating App Icon..."
+ICON_DIR="Sources/StarTrailsApp/Icons"
+if [ -d "$ICON_DIR" ]; then
+    ICONSET_DIR="AppIcon.iconset"
+    mkdir -p "$ICONSET_DIR"
+    
+    # Map available PNGs to required macOS iconset naming conventions
+    [ -f "$ICON_DIR/icon_64x64.png" ] && cp "$ICON_DIR/icon_64x64.png" "$ICONSET_DIR/icon_32x32@2x.png"
+    [ -f "$ICON_DIR/icon_64x64.png" ] && cp "$ICON_DIR/icon_64x64.png" "$ICONSET_DIR/icon_64x64.png"
+    [ -f "$ICON_DIR/icon_128x128.png" ] && cp "$ICON_DIR/icon_128x128.png" "$ICONSET_DIR/icon_128x128.png"
+    [ -f "$ICON_DIR/icon_256x256.png" ] && cp "$ICON_DIR/icon_256x256.png" "$ICONSET_DIR/icon_128x128@2x.png"
+    [ -f "$ICON_DIR/icon_256x256.png" ] && cp "$ICON_DIR/icon_256x256.png" "$ICONSET_DIR/icon_256x256.png"
+    [ -f "$ICON_DIR/icon_512x512.png" ] && cp "$ICON_DIR/icon_512x512.png" "$ICONSET_DIR/icon_256x256@2x.png"
+    [ -f "$ICON_DIR/icon_512x512.png" ] && cp "$ICON_DIR/icon_512x512.png" "$ICONSET_DIR/icon_512x512.png"
+
+    # Bundle into .icns file natively
+    iconutil -c icns "$ICONSET_DIR" -o "$APP_NAME.app/Contents/Resources/AppIcon.icns"
+    rm -rf "$ICONSET_DIR"
+fi
+
 # Create Info.plist
 echo "📝 Generating Info.plist..."
 cat > "$APP_NAME.app/Contents/Info.plist" <<EOF
@@ -41,6 +62,8 @@ cat > "$APP_NAME.app/Contents/Info.plist" <<EOF
 <dict>
     <key>CFBundleExecutable</key>
     <string>$APP_NAME</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
     <string>com.startrails.mac</string>
     <key>CFBundleName</key>
