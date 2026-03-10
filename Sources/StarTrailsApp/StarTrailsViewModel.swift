@@ -83,10 +83,19 @@ public class StarTrailsViewModel: ObservableObject {
     }
     
     public func loadDefaultModels() {
-        if let streaksURL = Bundle.module.url(forResource: "streaks", withExtension: "mlpackage") {
+        // Use a safe accessor that works in both standard macOS .app and swift build scenarios
+        let bundleLoader: Bundle? = {
+            if let resourcesURL = Bundle.main.resourceURL {
+                let checkURL = resourcesURL.appendingPathComponent("StarTrailsApp_StarTrailsApp.bundle")
+                if let resolved = Bundle(url: checkURL) { return resolved }
+            }
+            return Bundle.module
+        }()
+        
+        if let streaksURL = bundleLoader?.url(forResource: "streaks", withExtension: "mlpackage") {
             loadYOLOModel(url: streaksURL)
         }
-        if let gapFillURL = Bundle.module.url(forResource: "gapfill", withExtension: "mlpackage") {
+        if let gapFillURL = bundleLoader?.url(forResource: "gapfill", withExtension: "mlpackage") {
             loadGapFillModel(url: gapFillURL)
         }
     }

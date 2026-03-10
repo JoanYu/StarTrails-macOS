@@ -85,5 +85,9 @@ EOF
 # Make the executable runnable
 chmod +x "$APP_NAME.app/Contents/MacOS/$APP_NAME"
 
+# Ad-hoc sign the bundle to prevent Apple Silicon (AMFI) from immediately crashing the app
+echo "🔐 Signing Apple Silicon bundle..."
+codesign --force --deep --sign - "$APP_NAME.app"
+
 echo "✅ Build complete! You can find your macOS application at: $(pwd)/$APP_NAME.app"
 echo "You can double click StarTrails.app to open it."
