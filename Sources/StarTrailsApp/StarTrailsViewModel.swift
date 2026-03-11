@@ -286,11 +286,12 @@ public class StarTrailsViewModel: ObservableObject {
                 var currentWidth = 0
                 var currentHeight = 0
                 
+                let ciContext = CIContext(options: [.useSoftwareRenderer: false])
+                
                 for item in chunkData {
                     autoreleasepool {
-                        if let provider = CGDataProvider(url: item.url as CFURL),
-                           var cgImage = CGImage(jpegDataProviderSource: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) ??
-                                   CGImage(pngDataProviderSource: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) {
+                        if let ciImage = CIImage(contentsOf: item.url, options: [.applyOrientationProperty: true]),
+                           var cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) {
                             
                             // Mask out the detected streaks with black color
                             if !item.obbs.isEmpty {

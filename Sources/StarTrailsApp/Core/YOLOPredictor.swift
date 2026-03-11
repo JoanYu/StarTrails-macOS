@@ -16,7 +16,7 @@ public final class YOLOPredictor: @unchecked Sendable {
     
     public func predict(imagePath: String, confThreshold: Float = 0.25, iouThreshold: Float = 0.45) throws -> [OBBResult] {
         let url = URL(fileURLWithPath: imagePath)
-        guard let ciImage = CIImage(contentsOf: url) else {
+        guard let ciImage = CIImage(contentsOf: url, options: [.applyOrientationProperty: true]) else {
             throw NSError(domain: "YOLOPredictor", code: -1, userInfo: [NSLocalizedDescriptionKey: "Cannot load image from path \(imagePath)"])
         }
         
